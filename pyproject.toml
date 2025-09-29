@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mypackage"
+version = "0.1.0"
+description = "futfun"
+readme = "README.md"
+requires-python = ">=3.10.11"
+license = { file = "LICENSE" }
+authors = [
+  { name="Mister Raccoon", email="thanhwe8@example.com" }
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/thanhwe8/futfun"
