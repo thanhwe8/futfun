@@ -1,5 +1,7 @@
 """
-This file contains many utilities that can work indepdently on scripting level to do sniping or bidding with parameters
+This file contains many utilities that can work indepdently on scripting level to do sniping or bidding with parameters.
+The functions should work as pure functional programming approach (of course there are some intermediate variables within some
+functions that need to be refactored!)
 """
 
 import logging
@@ -160,7 +162,27 @@ def extract_all_filters_in_search(driver: webdriver.chrome.webdriver.WebDriver):
 
 
 # buy and sell interaction
-def set_min_bid(driver: webdriver.chrome.webdriver.WebDriver, buy_price: int, max_min_bid: int = 1000) -> None:
+def click_search(driver):
+    search_button_xpath = (
+        "/html/body/main/section/section/div[2]/div/div[2]/div/div[2]/button[2]"
+    )
+    search_button_element = driver.find_element(By.XPATH, search_button_xpath)
+    search_button_element.click()
+
+
+def click_reset(driver):
+    reset_button_xpath = (
+        "/html/body/main/section/section/div[2]/div/div[2]/div/div[2]/button[1]"
+    )
+    reset_button_element = driver.find_element(By.XPATH, reset_button_xpath)
+    reset_button_element.click()
+
+
+def set_min_bid(
+    driver: webdriver.chrome.webdriver.WebDriver,
+    buy_price: int,
+    max_min_bid: int = 1000,
+) -> None:
     """
     >>> set_min_bid(driver, buy_price=800)
     """
@@ -172,16 +194,174 @@ def set_min_bid(driver: webdriver.chrome.webdriver.WebDriver, buy_price: int, ma
     min_bid = min_bid.replace(",", "")
     if min_bid == "":
         min_bid_element.send_keys("150")
-    elif (int(min_bid) <= max_min_bid) & (int(min_bid) < buy_price):
+    elif (int(min_bid) < max_min_bid) & (int(min_bid) < buy_price):
         plus_element.click()
     else:
         min_bid_element.clear()
 
 
-def run_buy_and_store_raw(driver: webdriver.chrome.webdriver.WebDriver, buy_price:int = 400, max_min_bid:int= 1_000, first_only:bool = True) -> None:
+def run_buy_and_store_raw(
+    driver: webdriver.chrome.webdriver.WebDriver,
+    buy_price: int = 400,
+    max_min_bid: int = 1_000,
+    first_only: bool = True,
+) -> None:
+    """
+    For 1 snipe
+    >>> run_buy_and_store_raw(driver, buy_price=200, max_min_bid=150)
 
-    max_bid_price_xpath = "/html/body/main/section/section/div[2]/div/div[2]/div/div[1]/div[2]/div[2]/div[1]/div[2]/input"
+    For buying in bulk:
+    >>> for i in range(1,100):
+    >>>     if i % 10 == 0:
+    >>>         quick_sleep_gen(30.0)
+    >>>     else:
+    >>>         run_buy_and_store_raw(driver, buy_price=10_000, max_min_bid=150)
+    >>>         quick_sleep_gen(3.0)
 
-    buy_now_price_xpath = ""
+    """
+    min_bid_input_xpath = "/html/body/main/section/section/div[2]/div/div[2]/div/div[1]/div[2]/div[2]/div[1]/div[2]/input"
+    max_bid_input_xpath = "/html/body/main/section/section/div[2]/div/div[2]/div/div[1]/div[2]/div[2]/div[2]/div[2]/input"
+    min_buy_now_input_xpath = "/html/body/main/section/section/div[2]/div/div[2]/div/div[1]/div[2]/div[4]/div[1]/div[2]/input"
+    max_buy_now_input_xpath = "/html/body/main/section/section/div[2]/div/div[2]/div/div[1]/div[2]/div[4]/div[2]/div[2]/input"
 
-    set_min_bid(driver = driver, buy_price = buy_price, max_min_bid=max_min_bid)
+    max_bid_element = driver.find_element(By.XPATH, max_bid_input_xpath)
+    min_buy_now_element = driver.find_element(By.XPATH, min_buy_now_input_xpath)
+    max_buy_now_element = driver.find_element(By.XPATH, max_buy_now_input_xpath)
+
+    max_bid_element.clear()
+    min_buy_now_element.clear()
+    max_buy_now_element.clear()
+
+    set_min_bid(driver=driver, buy_price=buy_price, max_min_bid=max_min_bid)
+    max_buy_now_element.send_keys(buy_price)
+
+    reset_button_xpath = (
+        "/html/body/main/section/section/div[2]/div/div[2]/div/div[2]/button[1]"
+    )
+    reset_button_element = driver.find_element(By.XPATH, reset_button_xpath)
+
+    search_button_xpath = (
+        "/html/body/main/section/section/div[2]/div/div[2]/div/div[2]/button[2]"
+    )
+    search_button_element = driver.find_element(By.XPATH, search_button_xpath)
+    search_button_element.click()
+
+    quick_sleep_gen(1.0)
+
+    list_of_cards_xpath = (
+        "/html/body/main/section/section/div[2]/div/div/section[1]/div/ul/li"
+    )
+    list_of_cards_element = driver.find_elements(By.XPATH, list_of_cards_xpath)
+    total_cards_found = len(list_of_cards_element)
+
+    back_button_xpath = "/html/body/main/section/section/div[1]/button"
+    back_button_element = driver.find_element(By.XPATH, back_button_xpath)
+
+    if total_cards_found == 0:
+        logging.critical("Nothing found, please-retry")
+        quick_sleep_gen(0.5)
+        back_button_element.click()
+    else:
+        for i in range(1, total_cards_found + 1):
+            current_card_xpath = f"/html/body/main/section/section/div[2]/div/div/section[1]/div/ul/li[{i}]"
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, current_card_xpath))
+            )
+            driver.find_element(By.XPATH, current_card_xpath).click()
+
+            # Extract information from current card
+            quoted_buy_now_xpath = current_card_xpath + "/div/div[2]/div[3]/span[2]"
+            quoted_buy_now_element = driver.find_element(By.XPATH, quoted_buy_now_xpath)
+            quoted_buy_now_price = int(quoted_buy_now_element.text.replace(",", ""))
+            print(quoted_buy_now_price)
+
+            # Get current available coin
+            available_coin_xpath = (
+                "/html/body/main/section/section/div[1]/div[1]/div[1]"
+            )
+            available_coin_element = driver.find_element(By.XPATH, available_coin_xpath)
+            available_coin = int(available_coin_element.text.replace(",", ""))
+
+            if available_coin > quoted_buy_now_price:
+                # Very important filter to make sure we dont buy ridiculous price due to some ops
+                if quoted_buy_now_price <= buy_price:
+                    # Click "Buy Now for {coin}"
+                    driver.find_element(
+                        By.XPATH,
+                        "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/button[2]",
+                    ).click()
+                    # Click "OK" from pop up window
+                    driver.find_element(
+                        By.XPATH, "/html/body/div[4]/section/div/div/button[1]/span[1]"
+                    ).click()
+                    WebDriverWait(driver, 3).until(
+                        EC.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                f"/html/body/main/section/section/div[2]/div/div/section[1]/div/ul/li[{i}]",
+                            )
+                        )
+                    )
+                    quick_sleep_gen(1.0)
+                    status = driver.find_element(
+                        By.XPATH,
+                        f"/html/body/main/section/section/div[2]/div/div/section[1]/div/ul/li[{i}]",
+                    ).get_attribute("class")
+                    print(status)
+                    if "won" in status:
+                        # "Click Send To Transfer List"
+                        driver.find_element(
+                            By.XPATH,
+                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[3]/button[9]",
+                        ).click()
+                        print("Card stored successfully")
+                        break
+                    else:
+                        print("Failed to buy the card")
+            else:
+                print(f"Available coin is not enough: {available_coin}")
+
+            if first_only is True:
+                break
+
+        quick_sleep_gen(2)
+        back_button_element.click()
+
+
+def run_buy_and_store_loop(
+    driver: webdriver.chrome.webdriver.WebDriver,
+    quality: str = None,
+    rarity: str = None,
+    name: str = None,
+    chemistry: str = None,
+    position: str = None,
+    loop_round: int = 100,
+    rest_time: int = 40,
+    wait_time: int = 4,
+    buy_price: int = 400,
+    max_min_bid: int = 1_000,
+    first_only: bool = True,
+) -> None:
+    """
+    >>> run_buy_and_store_loop(driver = driver, quality = "Gold", rarity = "Rare", chemistry = "Shadow", position = "Defenders", buy_price = 1_000,max_min_bid = 900)
+    """
+    click_reset(driver)
+    if quality is not None:
+        select_input_in_search(driver, "Quality", quality)
+    if rarity is not None:
+        select_input_in_search(driver, "Rarity", rarity)
+    if chemistry is not None:
+        select_input_in_search(driver, "Chemistry", chemistry)
+    if position is not None:
+        select_input_in_search(driver, "Position", position)
+    for i in range(1, loop_round):
+        if i % 40 == 0:
+            quick_sleep_gen(rest_time)
+        else:
+            run_buy_and_store_raw(driver, buy_price=buy_price, max_min_bid=max_min_bid, first_only=first_only)
+            quick_sleep_gen(wait_time)
+
+
+
+
+run_buy_and_store_loop(driver = driver, quality = "Gold", rarity = "Rare", chemistry = "Shadow", position = "Defenders", buy_price = 1_000,max_min_bid = 900)

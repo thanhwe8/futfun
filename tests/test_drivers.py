@@ -148,8 +148,8 @@ def set_min_bid(driver, buy_price:int, max_min_bid:int = 1000) -> None:
 
 
 
-def buy_and_store_without_filter(driver, buy_price:int=400.0, max_min_bid_config:int=1000, first_only:bool = True) -> None:
-    pass
+def buy_and_store_without_filter(driver, buy_price:int=400, max_min_bid_config:int=1000, first_only:bool = True) -> None:
+    
 
 
 
