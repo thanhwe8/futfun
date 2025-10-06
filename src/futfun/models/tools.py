@@ -358,10 +358,23 @@ def run_buy_and_store_loop(
         if i % 40 == 0:
             quick_sleep_gen(rest_time)
         else:
-            run_buy_and_store_raw(driver, buy_price=buy_price, max_min_bid=max_min_bid, first_only=first_only)
+            run_buy_and_store_raw(
+                driver,
+                buy_price=buy_price,
+                max_min_bid=max_min_bid,
+                first_only=first_only,
+            )
             quick_sleep_gen(wait_time)
 
 
-
-
-run_buy_and_store_loop(driver = driver, quality = "Gold", rarity = "Rare", chemistry = "Shadow", position = "Defenders", buy_price = 1_000,max_min_bid = 900)
+run_buy_and_store_loop(
+    driver=driver,
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Shadow",
+    position="Defenders",
+    buy_price=1_000,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50,
+)
