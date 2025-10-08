@@ -367,14 +367,26 @@ def run_buy_and_store_loop(
             quick_sleep_gen(wait_time)
 
 
-run_buy_and_store_loop(
-    driver=driver,
-    quality="Gold",
-    rarity="Rare",
-    chemistry="Shadow",
-    position="Defenders",
-    buy_price=1_000,
-    max_min_bid=600,
-    loop_round=1000,
-    rest_time=50,
-)
+# run_buy_and_store_loop(
+#     driver=driver,
+#     quality="Gold",
+#     rarity="Rare",
+#     chemistry="Shadow",
+#     position="Defenders",
+#     buy_price=1_000,
+#     max_min_bid=600,
+#     loop_round=1000,
+#     rest_time=50,
+# )
+
+# run_buy_and_store_loop(
+#     driver=driver,
+#     quality="Gold",
+#     rarity="Rare",
+#     chemistry="Shadow",
+#     position="RB",
+#     buy_price=1_000,
+#     max_min_bid=600,
+#     loop_round=1000,
+#     rest_time=50,
+# )

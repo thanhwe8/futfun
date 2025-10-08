@@ -16,3 +16,10 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/thanhwe8/futfun"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
