@@ -21,8 +21,20 @@ run_buy_and_store_loop(
     quality="Gold",
     rarity="Rare",
     chemistry="Shadow",
-    position="RB",
-    buy_price=1_000,
+    position="Defenders",
+    buy_price=950,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50,
+)
+
+run_buy_and_store_loop(
+    driver=driver,
+    name="Barella",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Shadow",
+    buy_price=950,
     max_min_bid=600,
     loop_round=1000,
     rest_time=50,
