@@ -5,6 +5,8 @@ functions that need to be refactored!)
 """
 
 import logging
+import datetime
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
@@ -308,6 +310,14 @@ def run_buy_and_store_raw(
                         f"/html/body/main/section/section/div[2]/div/div/section[1]/div/ul/li[{i}]",
                     ).get_attribute("class")
                     print(status)
+                    now = datetime.now()
+                    current_time = now.strftime("%H_%M_%S")
+                    current_time = str(current_time)
+                    file_name = current_time + ".png"
+                    driver.save_screenshot(r"./Output/{}".format(file_name))
+                        
+                    saved_path = r"./Output/{}".format(file_name)
+                    print(saved_path)
                     if "won" in status:
                         # "Click Send To Transfer List"
                         driver.find_element(
@@ -334,6 +344,8 @@ def run_buy_and_store_loop(
     rarity: str = None,
     name: str = None,
     chemistry: str = None,
+    country:str = None,
+    league:str = None,
     position: str = None,
     loop_round: int = 100,
     rest_time: int = 40,
@@ -352,6 +364,10 @@ def run_buy_and_store_loop(
         select_input_in_search(driver, "Quality", quality)
     if rarity is not None:
         select_input_in_search(driver, "Rarity", rarity)
+    if country is not None:
+        select_input_in_search(driver, "Country", country)
+    if league is not None:
+        select_input_in_search(driver, "League", league)
     if chemistry is not None:
         select_input_in_search(driver, "Chemistry", chemistry)
     if position is not None:
