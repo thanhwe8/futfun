@@ -62,7 +62,7 @@ run_buy_and_store_loop(
     quality="Gold",
     rarity="Rare",
     # chemistry="Shadow",
-    buy_price=6_700,
+    buy_price=6300,
     max_min_bid=600,
     loop_round=1000,
     rest_time=50,
@@ -72,12 +72,101 @@ run_buy_and_store_loop(
 
 run_buy_and_store_loop(
     driver=driver,
-    name="Buhl",
+    name="Stegen",
     quality="Gold",
     rarity="Rare",
     # chemistry="Shadow",
-    buy_price=6_700,
+    buy_price=6_100,
     max_min_bid=600,
     loop_round=1000,
     rest_time=50,
+)
+
+# Cristiano Ronaldo
+run_buy_and_store_loop(
+    driver=driver,
+    name="Cristiano Ronaldo",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Hunter",
+    buy_price=5_000,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50
+)
+
+run_buy_and_store_loop(
+    driver=driver,
+    name="Cristiano Ronaldo",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Hunter",
+    buy_price=4200,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50
+)
+
+run_buy_and_store_loop(
+    driver=driver,
+    name="Antoine Griezmann",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Hunter",
+    buy_price=3_800,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50
+)
+
+run_buy_and_store_loop(
+    driver=driver,
+    name="Bryan Mbeumo",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Hunter",
+    buy_price=4600,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50
+)
+
+
+
+
+run_buy_and_store_loop(
+    driver=driver,
+    name="Dumfries",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Shadow",
+    buy_price=1500,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50
+)
+
+
+run_buy_and_store_loop(
+    driver=driver,
+    name="Sam Kerr",
+    quality="Gold",
+    rarity="Rare",
+    buy_price=12_500,
+    max_min_bid=600,
+    loop_round=100,
+    rest_time=50
+)
+
+
+run_buy_and_sell_loop(
+    driver=driver,
+    name="Dumfries",
+    quality="Gold",
+    rarity="Rare",
+    chemistry="Shadow",
+    buy_price=1500,
+    max_min_bid=600,
+    loop_round=1000,
+    rest_time=50
 )
