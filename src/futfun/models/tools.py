@@ -482,7 +482,7 @@ def run_buy_and_sell_raw(
                     current_time = now.strftime("%H_%M_%S")
                     current_time = str(current_time)
                     file_name = current_time + ".png"
-                    driver.save_screenshot(f"/home/thanhuwe8/output/{file_name}")
+                    driver.save_screenshot(f"../../../../output/{file_name}")
 
                     saved_path = r"./Output/{}".format(file_name)
                     print(saved_path)
@@ -497,8 +497,9 @@ def run_buy_and_sell_raw(
                                 )
                             )
                         )
-                        driver.find_element_by_xpath(
-                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[1]"
+                        driver.find_element(
+                            By.XPATH,
+                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[1]",
                         ).click()
 
                         # Wait until Buy Now Price is available
@@ -514,8 +515,9 @@ def run_buy_and_sell_raw(
                         logger.info(f"Start to sell: {sell_price}")
 
                         # Input "Start Price:"
-                        start_price = driver.find_element_by_xpath(
-                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[2]/div[2]/div[2]/input"
+                        start_price = driver.find_element(
+                            By.XPATH,
+                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[2]/div[2]/div[2]/input",
                         )
                         start_price.click()
                         start_price.send_keys(Keys.BACKSPACE)
@@ -523,8 +525,9 @@ def run_buy_and_sell_raw(
                         start_price.send_keys(sell_price)
 
                         # Input "Buy Now Price:"
-                        buy_now_price = driver.find_element_by_xpath(
-                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/input"
+                        buy_now_price = driver.find_element(
+                            By.XPATH,
+                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[2]/div[3]/div[2]/input",
                         )
                         buy_now_price.click()
                         buy_now_price.send_keys(Keys.BACKSPACE)
@@ -532,8 +535,9 @@ def run_buy_and_sell_raw(
                         buy_now_price.send_keys(sell_price)
 
                         # Click "List for Transfer"
-                        driver.find_element_by_xpath(
-                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[2]/button"
+                        driver.find_element(
+                            By.XPATH,
+                            "/html/body/main/section/section/div[2]/div/div/section[2]/div/div/div[2]/div[2]/div[2]/button",
                         ).click()
                         logger.info("SELL SUCCESSFULLY")
 
