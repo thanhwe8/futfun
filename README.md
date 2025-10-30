@@ -7,4 +7,9 @@
 
 
 # Some ops modification to make testing and releaseing easier
-- set PYTHONPATH=C:\full\path\to\your_project\src;%PYTHONPATH%
+- set PYTHONPATH=C:\full\path\to\your_../../../../output/%
+
+
+# Development pending items 
+- Handling bot to maintain status of sniping
+- Save screenshot for bought/missed cards
